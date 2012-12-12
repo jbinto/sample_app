@@ -57,5 +57,15 @@ describe User do
     end
   end
 
+  describe "when email addres is already taken - case insensitive" do
+    before do
+      user_same_email = @user.dup
+      user_same_email.email = @user.email.upcase
+      user_same_email.save
+    end
+
+    # note: `it` here refers to @user, not user_same_email
+    it { should_not be_valid }
+  end
 
 end
