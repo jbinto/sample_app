@@ -32,4 +32,30 @@ describe User do
     it { should_not be_valid }
   end
 
+  describe "when name is too long" do
+    before { @user.name = "a" * 51 } 
+    it { should_not be_valid  } 
+  end
+
+  describe "when email format is invalid" do
+    it "should be valid" do
+      emails = %w(foo bax.com johhn@@bar.com)
+      emails.each do |e|
+        @user.email = e
+        @user.should_not be_valid 
+      end
+    end
+  end
+
+  describe "when email format is valid" do
+    it "should be valid" do
+      emails = %w(me@gmail.com foo-bar_baz@net-scape.com a+b@jp.cn)
+      emails.each do |e|
+        @user.email = e
+        @user.should be_valid 
+      end
+    end
+  end
+
+
 end
