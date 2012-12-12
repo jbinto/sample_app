@@ -68,4 +68,20 @@ describe User do
     it { should_not be_valid }
   end
 
+
+  describe "email is saved to database in lowercase" do
+    # Danger! I'm actually writing to the db. Is this a good idea?
+    subject { @user.email }
+    before do
+      @user.email = "ABC@DEF.COM"
+      @user.save
+    end
+
+    it { should == "abc@def.com" } 
+
+    after do
+      @user.destroy
+    end
+  end
+
 end
