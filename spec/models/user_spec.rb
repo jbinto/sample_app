@@ -13,12 +13,16 @@ require 'spec_helper'
 
 describe User do
 
-  before { @user = User.new(name: "Example User", email: "user@example.org") }
+  before { @user = User.new(name: "Example User", email: "user@example.org",
+                            password: "foobar", password_confirmation: "foobar") }
 
   subject { @user }
 
   it { should respond_to(:name) }
   it { should respond_to(:email) } 
+  it { should respond_to(:password_digest) } 
+  it { should respond_to(:password) } 
+  it { should respond_to(:password_confirmation) } 
 
   it { should be_valid }
 
@@ -80,8 +84,24 @@ describe User do
     it { should == "abc@def.com" } 
 
     after do
+      # Not sure if this is a good idea either... 'cleanup'?
       @user.destroy
     end
+  end
+
+  describe "when password is not present" do
+    before { @user.password = @user.password_confirmation = " " }
+    it { should_not be_valid }
+  end
+
+  describe "when password does not match confirmation" do
+    before { @user.password_confirmation = "confirm" }
+    it { should_not be_valid }
+  end
+
+  describe "when password confirmation is nil" do
+    before { @user.password_confirmation = nil }
+    it { should_not be_valid }
   end
 
 end
