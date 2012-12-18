@@ -40,8 +40,18 @@ describe "User pages" do
       it "should create a user" do
         expect { click_button submit }.to change(User, :count).by(1)
       end
-
     end
+    
+    describe "with bad email" do
+      before do
+        fill_in "Email",  with: "not.an.email"
+        click_button submit
+      end
+
+      it { should have_content("Email is invalid") } 
+    end
+
+
   end
 
 
